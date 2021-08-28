@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "com.nekometer.esnya-unity-tools": "https://github.com/esnya/EsnyaUnityTools.git",
     "com.unity.collab-proxy": "1.6.0",
     "com.unity.ide.rider": "1.2.1",
     "com.unity.ide.visualstudio": "2.0.9",

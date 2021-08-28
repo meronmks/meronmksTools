@@ -1,12 +1,5 @@
 {
   "dependencies": {
-    "com.nekometer.esnya-unity-tools": {
-      "version": "https://github.com/esnya/EsnyaUnityTools.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "3aab22fb275ff2dcdc74448c8f00449a83095f70"
-    },
     "com.unity.collab-proxy": {
       "version": "1.6.0",
       "depth": 0,

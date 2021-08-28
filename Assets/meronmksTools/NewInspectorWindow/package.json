@@ -1,0 +1,14 @@
+{
+    "name": "com.meronmks.new-inspector-window",
+    "version": "1.0.0",
+    "displayName": "NewInspectorWindow",
+    "unity": "2018.4",
+    "description": "",
+    "keywords": [
+      "Tool",
+      "Unity"
+    ],
+    "author": "meronmks",
+    "license": "MIT",
+    "private": true
+  }

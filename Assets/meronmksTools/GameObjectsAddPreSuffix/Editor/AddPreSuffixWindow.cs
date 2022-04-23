@@ -61,6 +61,7 @@ namespace MeronmksTools
                         g_RootGameObject.name = prefixText + g_RootGameObject.name + suffixText;
                     }
                     ChangeAllUnderObjectName(g_RootGameObject);
+                    Debug.Log("リネーム完了！");
                 }
             }
         }

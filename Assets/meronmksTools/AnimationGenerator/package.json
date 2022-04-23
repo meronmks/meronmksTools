@@ -1,0 +1,14 @@
+{
+    "name": "com.meronmks.animationgenerator",
+    "version": "1.0.0",
+    "displayName": "AnimationGenerator",
+    "unity": "2018.4",
+    "description": "",
+    "keywords": [
+      "Tool",
+      "Unity"
+    ],
+    "author": "meronmks",
+    "license": "MIT",
+    "private": true
+  }

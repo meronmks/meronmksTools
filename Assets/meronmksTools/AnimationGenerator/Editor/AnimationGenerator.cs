@@ -10,6 +10,7 @@ namespace MeronmksTools
     {
         [SerializeField] private Transform[] g_RootTransform;
         private string g_CreateAnimPath = "Assets/";
+        private bool isObjActive = true;
         private bool isTransFormPosEx = true;
         private bool isTransFormRotEx = true;
         private bool isTransFormScaEx = true;
@@ -29,6 +30,7 @@ namespace MeronmksTools
             SerializedProperty sp_g_RootGameObject = so.FindProperty(nameof(g_RootTransform));
             EditorGUILayout.PropertyField(sp_g_RootGameObject, new GUIContent("RootGameObject"), true);
             g_CreateAnimPath = EditorGUILayout.TextField("書き出し先のPath", g_CreateAnimPath);
+            isObjActive = EditorGUILayout.Toggle("Active状態を書き出す", isObjActive);
             isTransFormPosEx = EditorGUILayout.Toggle("Positionも書き出す", isTransFormPosEx);
             isTransFormRotEx = EditorGUILayout.Toggle("Rotationも書き出す", isTransFormRotEx);
             isTransFormScaEx = EditorGUILayout.Toggle("Scaleも書き出す", isTransFormScaEx);
@@ -49,6 +51,8 @@ namespace MeronmksTools
                     for (int i = 0; i < g_RootTransform.Length; i++)
                     {
                         SkinnedMeshRenderer smr = g_RootTransform[i].GetComponent<SkinnedMeshRenderer>();
+                        
+                        //
                         if (smr != null)
                         {
                             var mesh = smr.sharedMesh;
@@ -63,7 +67,15 @@ namespace MeronmksTools
                                 animation.SetCurve(GetFullPath(g_RootTransform[i]), typeof(SkinnedMeshRenderer), $"blendShape.{mesh.GetBlendShapeName(j)}", curve);
                             }   
                         }
-
+                        
+                        // Active状態を書き出す
+                        if (isObjActive)
+                        {
+                            var isActiveF = Convert.ToSingle(g_RootTransform[i].gameObject.activeSelf);
+                            AnimationCurve curve = AnimationCurve.Linear(0.0f, isActiveF, 0.0f, isActiveF);
+                            animation.SetCurve(GetFullPath(g_RootTransform[i]), typeof(GameObject), "m_IsActive", curve);
+                        }
+                        
                         // TransFormのPositionを書き出す
                         if (isTransFormPosEx)
                         {

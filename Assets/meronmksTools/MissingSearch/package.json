@@ -8,7 +8,10 @@
       "Tool",
       "Unity"
     ],
-    "author": "meronmks",
+    "author": {
+      "name": "meronmks",
+      "url": "https://github.com/meronmks/"
+    },
     "license": "MIT",
     "private": true
   }

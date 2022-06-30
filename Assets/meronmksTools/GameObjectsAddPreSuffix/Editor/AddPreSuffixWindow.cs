@@ -11,7 +11,7 @@ namespace MeronmksTools
         [SerializeField] private Transform g_RootGameObject;
         private String prefixText;
         private String suffixText;
-        private bool isRootObjectRename = true;
+        private bool isRootObjectRename = false;
         private bool isDisabled = true;
         
         [MenuItem("Tools/AddPreSuffix")]
@@ -36,7 +36,7 @@ namespace MeronmksTools
             g_RootGameObject = (Transform) EditorGUILayout.ObjectField("RootGameObject", g_RootGameObject, typeof(Transform), true);
             prefixText = EditorGUILayout.TextField("Prefix", prefixText);
             suffixText = EditorGUILayout.TextField("Suffix", suffixText);
-            isRootObjectRename = EditorGUILayout.Toggle("Rootオブジェクトもリネーム対象とする", isRootObjectRename);
+            isRootObjectRename = EditorGUILayout.Toggle("Rootもリネーム対象とする", isRootObjectRename);
             if (g_RootGameObject == null)
             {
                 EditorGUILayout.HelpBox("RootGameObjectが未設定です", MessageType.Error);

@@ -5,12 +5,13 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace MeronmksTools
 {
     public class AnimationGenerator : EditorWindow
     {
-        [SerializeField] private Transform[] g_RootTransform;
+        [SerializeField] private Transform[] g_TargetTransform;
         private string g_CreateAnimPath = "Animations";
         private string g_CreateAnimName = "generateAnim";
         private bool isObjActive = true;
@@ -23,7 +24,10 @@ namespace MeronmksTools
         [MenuItem("Tools/AnimationGenerator")]
         private static void ShowWindow()
         {
-            GetWindow<AnimationGenerator>(false, "AnimationGenerator", true);
+            var window = GetWindow<AnimationGenerator>(false, "", true);
+            var icon = EditorGUIUtility.IconContent("Animation Icon");
+            icon.text = "AnimationGenerator";
+            window.titleContent = icon;
         }
 
         private void OnGUI()
@@ -31,9 +35,9 @@ namespace MeronmksTools
             bool isDisabled = false;
             
             SerializedObject so = new SerializedObject(this);
-            SerializedProperty sp_g_RootGameObject = so.FindProperty(nameof(g_RootTransform));
+            SerializedProperty sp_g_RootGameObject = so.FindProperty(nameof(g_TargetTransform));
             EditorGUILayout.PropertyField(sp_g_RootGameObject, new GUIContent("ターゲットのGameObject"), true);
-            if (g_RootTransform == null || g_RootTransform.Length == 0)
+            if (g_TargetTransform == null || g_TargetTransform.Length == 0)
             {
                 EditorGUILayout.HelpBox("ターゲットのGameObjectが未設定です", MessageType.Error);
                 isDisabled = true;
@@ -66,9 +70,9 @@ namespace MeronmksTools
                     var targetPath = $"Assets/{g_CreateAnimPath}";
                     var animation = new AnimationClip();
 
-                    for (int i = 0; i < g_RootTransform.Length; i++)
+                    for (int i = 0; i < g_TargetTransform.Length; i++)
                     {
-                        SkinnedMeshRenderer smr = g_RootTransform[i].GetComponent<SkinnedMeshRenderer>();
+                        SkinnedMeshRenderer smr = g_TargetTransform[i].GetComponent<SkinnedMeshRenderer>();
                         
                         if (smr != null)
                         {
@@ -88,49 +92,49 @@ namespace MeronmksTools
                                 }
                                 // BlendShapeを書き出す
                                 AnimationCurve curve = AnimationCurve.Linear(0f, smr.GetBlendShapeWeight(j), 0f, smr.GetBlendShapeWeight(j));
-                                animation.SetCurve(GetFullPath(g_RootTransform[i]), typeof(SkinnedMeshRenderer), $"blendShape.{mesh.GetBlendShapeName(j)}", curve);
+                                animation.SetCurve(GetFullPath(g_TargetTransform[i]), typeof(SkinnedMeshRenderer), $"blendShape.{mesh.GetBlendShapeName(j)}", curve);
                             }   
                         }
                         
                         // Active状態を書き出す
                         if (isObjActive)
                         {
-                            var isActiveF = Convert.ToSingle(g_RootTransform[i].gameObject.activeSelf);
+                            var isActiveF = Convert.ToSingle(g_TargetTransform[i].gameObject.activeSelf);
                             AnimationCurve curve = AnimationCurve.Linear(0f, isActiveF, 0f, isActiveF);
-                            animation.SetCurve(GetFullPath(g_RootTransform[i]), typeof(GameObject), "m_IsActive", curve);
+                            animation.SetCurve(GetFullPath(g_TargetTransform[i]), typeof(GameObject), "m_IsActive", curve);
                         }
                         
                         // TransFormのPositionを書き出す
                         if (isTransFormPosEx)
                         {
-                            AnimationCurve curvePX = AnimationCurve.Linear(0f, g_RootTransform[i].localPosition.x, 0f, g_RootTransform[i].localPosition.x);
-                            AnimationCurve curvePY = AnimationCurve.Linear(0f, g_RootTransform[i].localPosition.y, 0f, g_RootTransform[i].localPosition.y);
-                            AnimationCurve curvePZ = AnimationCurve.Linear(0f, g_RootTransform[i].localPosition.z, 0f, g_RootTransform[i].localPosition.z);
-                            animation.SetCurve(GetFullPath(g_RootTransform[i]), typeof(Transform), "localPosition.x", curvePX);
-                            animation.SetCurve(GetFullPath(g_RootTransform[i]), typeof(Transform), "localPosition.y", curvePY);
-                            animation.SetCurve(GetFullPath(g_RootTransform[i]), typeof(Transform), "localPosition.z", curvePZ);
+                            AnimationCurve curvePX = AnimationCurve.Linear(0f, g_TargetTransform[i].localPosition.x, 0f, g_TargetTransform[i].localPosition.x);
+                            AnimationCurve curvePY = AnimationCurve.Linear(0f, g_TargetTransform[i].localPosition.y, 0f, g_TargetTransform[i].localPosition.y);
+                            AnimationCurve curvePZ = AnimationCurve.Linear(0f, g_TargetTransform[i].localPosition.z, 0f, g_TargetTransform[i].localPosition.z);
+                            animation.SetCurve(GetFullPath(g_TargetTransform[i]), typeof(Transform), "localPosition.x", curvePX);
+                            animation.SetCurve(GetFullPath(g_TargetTransform[i]), typeof(Transform), "localPosition.y", curvePY);
+                            animation.SetCurve(GetFullPath(g_TargetTransform[i]), typeof(Transform), "localPosition.z", curvePZ);
                         }
                         
                         // TransFormのRotationを書き出す
                         if (isTransFormPosEx)
                         {
-                            AnimationCurve curveRX = AnimationCurve.Linear(0f, g_RootTransform[i].localRotation.x, 0f, g_RootTransform[i].localRotation.x);
-                            AnimationCurve curveRY = AnimationCurve.Linear(0f, g_RootTransform[i].localRotation.y, 0f, g_RootTransform[i].localRotation.y);
-                            AnimationCurve curveRZ = AnimationCurve.Linear(0f, g_RootTransform[i].localRotation.z, 0f, g_RootTransform[i].localRotation.z);
-                            animation.SetCurve(GetFullPath(g_RootTransform[i]), typeof(Transform), "localRotation.x", curveRX);
-                            animation.SetCurve(GetFullPath(g_RootTransform[i]), typeof(Transform), "localRotation.y", curveRY);
-                            animation.SetCurve(GetFullPath(g_RootTransform[i]), typeof(Transform), "localRotation.z", curveRZ);
+                            AnimationCurve curveRX = AnimationCurve.Linear(0f, g_TargetTransform[i].localRotation.x, 0f, g_TargetTransform[i].localRotation.x);
+                            AnimationCurve curveRY = AnimationCurve.Linear(0f, g_TargetTransform[i].localRotation.y, 0f, g_TargetTransform[i].localRotation.y);
+                            AnimationCurve curveRZ = AnimationCurve.Linear(0f, g_TargetTransform[i].localRotation.z, 0f, g_TargetTransform[i].localRotation.z);
+                            animation.SetCurve(GetFullPath(g_TargetTransform[i]), typeof(Transform), "localRotation.x", curveRX);
+                            animation.SetCurve(GetFullPath(g_TargetTransform[i]), typeof(Transform), "localRotation.y", curveRY);
+                            animation.SetCurve(GetFullPath(g_TargetTransform[i]), typeof(Transform), "localRotation.z", curveRZ);
                         }
                         
                         // TransFormのScaleを書き出す
                         if (isTransFormPosEx)
                         {
-                            AnimationCurve curveCX = AnimationCurve.Linear(0f, g_RootTransform[i].localScale.x, 0f, g_RootTransform[i].localScale.x);
-                            AnimationCurve curveCY = AnimationCurve.Linear(0f, g_RootTransform[i].localScale.y, 0f, g_RootTransform[i].localScale.y);
-                            AnimationCurve curveCZ = AnimationCurve.Linear(0f, g_RootTransform[i].localScale.z, 0f, g_RootTransform[i].localScale.z);
-                            animation.SetCurve(GetFullPath(g_RootTransform[i]), typeof(Transform), "localScale.x", curveCX);
-                            animation.SetCurve(GetFullPath(g_RootTransform[i]), typeof(Transform), "localScale.y", curveCY);
-                            animation.SetCurve(GetFullPath(g_RootTransform[i]), typeof(Transform), "localScale.z", curveCZ);
+                            AnimationCurve curveCX = AnimationCurve.Linear(0f, g_TargetTransform[i].localScale.x, 0f, g_TargetTransform[i].localScale.x);
+                            AnimationCurve curveCY = AnimationCurve.Linear(0f, g_TargetTransform[i].localScale.y, 0f, g_TargetTransform[i].localScale.y);
+                            AnimationCurve curveCZ = AnimationCurve.Linear(0f, g_TargetTransform[i].localScale.z, 0f, g_TargetTransform[i].localScale.z);
+                            animation.SetCurve(GetFullPath(g_TargetTransform[i]), typeof(Transform), "localScale.x", curveCX);
+                            animation.SetCurve(GetFullPath(g_TargetTransform[i]), typeof(Transform), "localScale.y", curveCY);
+                            animation.SetCurve(GetFullPath(g_TargetTransform[i]), typeof(Transform), "localScale.z", curveCZ);
                         }
   
                     }

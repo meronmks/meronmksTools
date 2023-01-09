@@ -160,6 +160,11 @@ public class SimpleObjectSpawn : EditorWindow
                 // 保存
                 AssetDatabase.SaveAssets();
                 EditorUtility.SetDirty(g_animatorController);
+
+                if (EditorUtility.DisplayDialog("SimpleObjectSpawn", "正常に処理が完了しました", "OK"))
+                {
+                    
+                }
             }
         }
         

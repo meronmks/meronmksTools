@@ -1,0 +1,18 @@
+{
+  "name": "com.meronmks.simpleobjectspawn",
+  "version": "1.0.0",
+  "displayName": "SimpleObjectSpawn",
+  "unity": "2019.4",
+  "description": "",
+  "keywords": [
+    "Tool",
+    "Unity"
+  ],
+  "author": {
+    "name": "meronmks",
+    "url": "https://github.com/meronmks/"
+  },
+  "license": "WTFPL",
+  "private": true,
+  "url" : "https://github.com/meronmks/meronmksTools.git?path=/Assets/meronmksTools/SimpleObjectSpawn"
+}

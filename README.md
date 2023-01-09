@@ -28,3 +28,15 @@ https://github.com/meronmks/meronmksTools.git?path=/Assets/meronmksTools/Missing
 書き出し対象のオブジェクトは複数指定できます。
 ### UPMでのインストールURL
 https://github.com/meronmks/meronmksTools.git?path=/Assets/meronmksTools/AnimationGenerator
+
+## SimpleObjectSpawn
+### このツール何？
+指定したオブジェクトの表示非表示をするだけの単純なアニメーションをAnimator ControllerのLayerへ追加します。
+VRC想定ですがVRC固有アセットへの編集は行ってません。
+
+### 注意点
+オブジェクトのON/OFF切り替えを一つのアニメーションで行っているのでパーティクルなどを始めにOFFにするアニメーションの場合
+一度出現してから消えることになります。
+
+### UPMでのインストールURL
+https://github.com/meronmks/meronmksTools.git?path=/Assets/meronmksTools/SimpleObjectSpawn

@@ -75,6 +75,14 @@ public class SimpleObjectSpawn : EditorWindow
         g_defalutStateOn = EditorGUILayout.Toggle("デフォの遷移先をOnにする", g_defalutStateOn);
         
         g_CreateAnimPath = EditorGUILayout.TextField("書き出し先のフォルダ", g_CreateAnimPath);
+        if (GUILayout.Button(new GUIContent("フォルダ選択"), EditorStyles.miniButton))
+        {
+            var path = EditorUtility.OpenFolderPanel("書き出し先のフォルダ選択", Application.dataPath, string.Empty);
+            if (!string.IsNullOrEmpty(path))
+            {
+                g_CreateAnimPath = GetAssetsPath(path);
+            }
+        }
         if (new Regex(".*/$").IsMatch(g_CreateAnimPath))
         {
             g_CreateAnimPath = g_CreateAnimPath.Remove(g_CreateAnimPath.Length - 1);
@@ -171,5 +179,16 @@ public class SimpleObjectSpawn : EditorWindow
         }
 
         return path;
+    }
+
+    private string GetAssetsPath(string fullPath)
+    {
+        int startIndex = fullPath.IndexOf("Assets/", StringComparison.Ordinal);
+        if (startIndex == -1) startIndex = fullPath.IndexOf("Assets\\", StringComparison.Ordinal);
+        if (startIndex == -1) return "";
+        
+        string assetPath = fullPath.Substring(startIndex);
+        
+        return assetPath.Replace("Assets/","");
     }
 }

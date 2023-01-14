@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEditor.Animations;
@@ -114,13 +115,16 @@ public class SimpleObjectSpawn : EditorWindow
                     g_animatorController.AddParameter(g_ParameterName, AnimatorControllerParameterType.Bool);
                 }
                 
-                var layer = new AnimatorControllerLayer();
-                layer.name = g_LayerName;
-                layer.defaultWeight = 1f;
-                layer.blendingMode = AnimatorLayerBlendingMode.Override;
-                layer.stateMachine = new AnimatorStateMachine();
-                g_animatorController.AddLayer(layer);
-                var stateMachine = layer.stateMachine;
+                g_animatorController.AddLayer(g_LayerName);
+
+                // layer全体をコピーして編集後再セットしないと正しく反映されない　クソ
+                var layers = g_animatorController.layers;
+                var addLayerIndex = g_animatorController.layers.Length - 1;
+                layers[addLayerIndex].defaultWeight = 1f;
+                layers[addLayerIndex].blendingMode = AnimatorLayerBlendingMode.Override;
+                g_animatorController.layers = layers;
+                
+                var stateMachine = layers[addLayerIndex].stateMachine;
                 
                 var states = new List<AnimatorState>();
 
@@ -151,16 +155,19 @@ public class SimpleObjectSpawn : EditorWindow
                 transition1.AddCondition(AnimatorConditionMode.If, 0f, g_ParameterName);
                 var exitTransition1 = states[0].AddExitTransition();
                 exitTransition1.AddCondition(AnimatorConditionMode.IfNot, 0f, g_ParameterName);
+                exitTransition1.duration = 0f;
                 
                 var transition2 = stateMachine.AddEntryTransition(states[1]);
                 transition2.AddCondition(AnimatorConditionMode.IfNot, 0f, g_ParameterName);
                 var exitTransition2 = states[1].AddExitTransition();
                 exitTransition2.AddCondition(AnimatorConditionMode.If, 0f, g_ParameterName);
+                exitTransition2.duration = 0f;
                 
                 // 保存
-                AssetDatabase.SaveAssets();
                 EditorUtility.SetDirty(g_animatorController);
-
+                
+                AssetDatabase.SaveAssets();
+                
                 if (EditorUtility.DisplayDialog("SimpleObjectSpawn", "正常に処理が完了しました", "OK"))
                 {
                     

@@ -195,12 +195,6 @@ public class SimpleObjectSpawn : EditorWindow
 
     private string GetAssetsPath(string fullPath)
     {
-        int startIndex = fullPath.IndexOf("Assets/", StringComparison.Ordinal);
-        if (startIndex == -1) startIndex = fullPath.IndexOf("Assets\\", StringComparison.Ordinal);
-        if (startIndex == -1) return "";
-        
-        string assetPath = fullPath.Substring(startIndex);
-        
-        return assetPath.Replace("Assets/","");
+        return fullPath.Replace($"{Application.dataPath}/","");
     }
 }

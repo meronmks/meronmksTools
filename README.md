@@ -32,7 +32,8 @@ https://github.com/meronmks/meronmksTools.git?path=/Assets/meronmksTools/Animati
 ## SimpleObjectSpawn
 ### このツール何？
 指定したオブジェクトの表示非表示をするだけの単純なアニメーションをAnimator ControllerのLayerへ追加します。
-VRC想定ですがVRC固有アセットへの編集は行ってません。
+VRC想定ですがVRCSDK3が導入されていない環境でも依存しない機能については利用可能です。
+VRCSDK3が導入されているとVRCExpressionsMenuおよびVRCExpressionParametersへの編集機能も有効となります。
 
 ### 注意点
 オブジェクトのON/OFF切り替えを一つのアニメーションで行っているのでパーティクルなどを始めにOFFにするアニメーションの場合

@@ -329,15 +329,19 @@ namespace MeronmksTools
                 {
                     g_exParameters.parameters = parameters;
                 }
+                EditorUtility.SetDirty(g_exParameters);
             }
 
             if (g_exMenu != null)
             {
+                var controls = g_exMenu.controls;
                 var control = new VRCExpressionsMenu.Control();
                 control.name = g_exMenuName;
                 control.type = VRCExpressionsMenu.Control.ControlType.Toggle;
                 control.parameter = new VRCExpressionsMenu.Control.Parameter(){name = g_parameterName};
-                g_exMenu.controls.Add(control);
+                controls.Add(control);
+                g_exMenu.controls = controls;
+                EditorUtility.SetDirty(g_exMenu);
             }
 #endif
         }
@@ -349,7 +353,7 @@ namespace MeronmksTools
 
             while (parent)
             {
-                if (transform == g_rootTransform || parent == g_rootTransform) break;
+                if (transform == g_rootTransform || parent == g_rootTransform || transform.root == parent) break;
                 path = $"{parent.name}/{path}";
                 parent = parent.parent;
             }

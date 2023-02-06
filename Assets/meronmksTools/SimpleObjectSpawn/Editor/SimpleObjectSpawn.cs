@@ -175,6 +175,11 @@ namespace MeronmksTools
             }
             g_exParameterSave = EditorGUILayout.Toggle("アバターを着替えてもパラメータをSaveする", g_exParameterSave);
 #endif
+            var guid = AssetDatabase.AssetPathToGUID($"Assets/{g_createAnimPath}/{g_createClipName}.anim");
+            if (!string.IsNullOrEmpty(guid))
+            {
+                EditorGUILayout.HelpBox("出力先に同じ名前のAnimationClipが存在します。内容が上書きされるので注意してください。", MessageType.Warning);
+            }
             
             using (new EditorGUI.DisabledScope(isDisabled))
             {
@@ -248,7 +253,7 @@ namespace MeronmksTools
             }
 
             var transition1 = stateMachine.AddEntryTransition(states[0]);
-            if(g_inverse)
+            if(!g_inverse)
             {
                 transition1.AddCondition(AnimatorConditionMode.If, 0f, g_parameterName);
             }
@@ -257,7 +262,7 @@ namespace MeronmksTools
                 transition1.AddCondition(AnimatorConditionMode.IfNot, 0f, g_parameterName);
             }
             var exitTransition1 = states[0].AddExitTransition();
-            if(g_inverse)
+            if(!g_inverse)
             {
                 exitTransition1.AddCondition(AnimatorConditionMode.IfNot, 0f, g_parameterName);
             }
@@ -268,7 +273,7 @@ namespace MeronmksTools
             exitTransition1.duration = 0f;
             
             var transition2 = stateMachine.AddEntryTransition(states[1]);
-            if(g_inverse)
+            if(!g_inverse)
             {
                 transition2.AddCondition(AnimatorConditionMode.IfNot, 0f, g_parameterName);
             }
@@ -277,7 +282,7 @@ namespace MeronmksTools
                 transition2.AddCondition(AnimatorConditionMode.If, 0f, g_parameterName);
             }
             var exitTransition2 = states[1].AddExitTransition();
-            if(g_inverse)
+            if(!g_inverse)
             {
                 exitTransition2.AddCondition(AnimatorConditionMode.If, 0f, g_parameterName);
             }
